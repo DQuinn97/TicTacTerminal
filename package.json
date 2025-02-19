@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "inquirer": "^12.4.2"
+    "inquirer": "^12.4.2",
+    "readline-sync": "^1.4.10"
   }
 }
