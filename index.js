@@ -21,7 +21,7 @@ let drawCondition = false;
 // Game functions
 const toggleActivePlayer = () => {
   activePlayer = !activePlayer;
-  return playerTokens[+!activePlayer];
+  return playerTokens[+!activePlayer]; //return token of active player before toggle, +! converts previous boolean value to number
 };
 const renderBoard = () => {
   console.clear(); //clear board before re-rendering
