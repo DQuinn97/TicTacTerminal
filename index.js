@@ -40,6 +40,7 @@ udp.on("message", function (message, timetag, info) {
       activePlayer = data.activePlayer;
       renderBoard();
       console.log(data.win);
+      udp.close();
       break;
   }
 });
