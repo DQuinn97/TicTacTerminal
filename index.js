@@ -165,6 +165,7 @@ function takeTurn() {
       args: JSON.stringify({ board, activePlayer, win }),
     };
     console.log(win);
+    udp.close();
   } else {
     returnData = {
       address: "/turn",
