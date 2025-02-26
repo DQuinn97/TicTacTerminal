@@ -19,7 +19,7 @@ var udp = new osc.UDPPort({
 
 udp.on("ready", function () {
   udp.send({
-    address: "connect",
+    address: "/connect",
     args: JSON.stringify({}),
   });
 });
@@ -27,19 +27,19 @@ udp.on("ready", function () {
 udp.on("message", function (message, timetag, info) {
   let data;
   switch (message.address) {
-    case "connect":
-      udp.send({ address: "gamestart" });
+    case "/connect":
+      udp.send({ address: "/gamestart" });
       break;
-    case "gamestart":
+    case "/gamestart":
       takeTurn();
       break;
-    case "turn":
+    case "/turn":
       data = JSON.parse(message.args);
       board = data.board;
       activePlayer = data.activePlayer;
       takeTurn();
       break;
-    case "gameover":
+    case "/gameover":
       data = JSON.parse(message.args);
       board = data.board;
       activePlayer = data.activePlayer;
@@ -171,13 +171,13 @@ function takeTurn() {
   if (gameOver) {
     let win = !drawCondition ? `${activePlayerToken} won!!!` : "Draw";
     returnData = {
-      address: "gameover",
+      address: "/gameover",
       args: JSON.stringify({ board, activePlayer, win }),
     };
     console.log(win);
   } else {
     returnData = {
-      address: "turn",
+      address: "/turn",
       args: JSON.stringify({ board, activePlayer }),
     };
   }
