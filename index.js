@@ -19,13 +19,19 @@ udp.on("ready", function () {
   });
 });
 
+let connectionSet = false;
 udp.on("message", function (message, timetag, info) {
   let data;
   switch (message.address) {
     case "/connect":
-      udp.send({ address: "/gamestart" });
+      if (!connectionSet) {
+        connectionSet = true;
+        udp.send({ address: "/gamestart" });
+        console.log(info);
+      }
       break;
     case "/gamestart":
+      connectionSet = true;
       takeTurn();
       break;
     case "/turn":
@@ -41,6 +47,7 @@ udp.on("message", function (message, timetag, info) {
       renderBoard(false);
       console.log(data.win);
       setTimeout(() => udp.close(), 1000);
+      connectionSet = false;
       break;
   }
 });
