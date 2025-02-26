@@ -1,10 +1,10 @@
 import osc from "osc";
-import readline from "node:readline/promises";
-const { stdin: input, stdout: output } = await import("node:process");
-const rl = readline.createInterface({ input, output });
+// import readline from "node:readline/promises";
+// const { stdin: input, stdout: output } = await import("node:process");
+// const rl = readline.createInterface({ input, output });
 
 import inquirer from "inquirer";
-// import rl from "readline-sync";
+import rl from "readline-sync";
 import chalk from "chalk";
 
 const remoteAddress = "10.28.200.135";
