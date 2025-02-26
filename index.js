@@ -40,7 +40,7 @@ udp.on("message", function (message, timetag, info) {
       activePlayer = data.activePlayer;
       renderBoard();
       console.log(data.win);
-      process.exit(1);
+      setTimeout(() => process.exit(1), 1000);
       break;
   }
 });
@@ -174,5 +174,5 @@ function takeTurn() {
 
   udp.send(returnData);
 
-  if (gameOver) process.exit(1);
+  if (gameOver) setTimeout(() => process.exit(1), 1000);
 }
