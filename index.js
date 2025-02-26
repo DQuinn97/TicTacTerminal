@@ -172,7 +172,7 @@ function takeTurn() {
     };
   }
 
-  udp.send(returnData);
-
-  if (gameOver) udp.close();
+  udp.send(returnData).then(() => {
+    if (gameOver) udp.close();
+  });
 }
