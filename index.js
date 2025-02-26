@@ -48,17 +48,6 @@ do {
   let getCoords = (input) => input.coords.split(",").map((c) => +c.trim());
 
   renderBoard();
-  //   const input = await inquirer.prompt([
-  //     {
-  //       type: "input",
-  //       name: "coords",
-  //       message: `Player ${temp}, enter coordinates (x,y): `,
-  //       validate: (input) => {
-  //         let [match, x, y] = input.match(regex) ?? [];
-  //         return match && board[x][y] == " " ? true : "Please enter valid coords";
-  //       },
-  //     },
-  //   ]);
 
   const confirm = " ";
   let key;
