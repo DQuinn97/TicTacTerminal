@@ -13,6 +13,7 @@
   "dependencies": {
     "chalk": "^5.4.1",
     "inquirer": "^12.4.2",
+    "osc": "^2.4.5",
     "readline-sync": "^1.4.10"
   }
 }

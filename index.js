@@ -1,7 +1,63 @@
+import osc from "osc";
+import readline from "node:readline/promises";
+const { stdin: input, stdout: output } = await import("node:process");
+const rl = readline.createInterface({ input, output });
+
 import inquirer from "inquirer";
-import rl from "readline-sync";
+// import rl from "readline-sync";
 import chalk from "chalk";
 
+const remoteAddress = "10.28.200.135";
+
+// connection
+var udp = new osc.UDPPort({
+  localAddress: "0.0.0.0", // shouldn't matter here :
+  localPort: 9000, // not receiving, but here's a port anyway
+  remoteAddress: remoteAddress, // the other laptop
+  remotePort: 9000, // the port to send to
+});
+
+udp.on("ready", function () {
+  udp.send({
+    address: "connect",
+    args: JSON.stringify({}),
+  });
+});
+
+udp.on("message", function (message, timetag, info) {
+  let data;
+  switch (message.address) {
+    case "connect":
+      udp.send({ address: "gamestart" });
+      break;
+    case "gamestart":
+      takeTurn();
+      break;
+    case "turn":
+      data = JSON.parse(message.args);
+      board = data.board;
+      activePlayer = data.activePlayer;
+      takeTurn();
+      break;
+    case "gameover":
+      data = JSON.parse(message.args);
+      board = data.board;
+      activePlayer = data.activePlayer;
+      renderBoard();
+      console.log(data.win);
+      break;
+  }
+  console.log(message);
+});
+// rl.on("line", (answer) => {
+//   udp.send({
+//     address: "/sending/every/second",
+//     args: answer,
+//   });
+// });
+udp.open();
+
+let self = "O";
 // Player related variables
 const playerTokens = ["O", "X"];
 let activePlayer = true;
@@ -9,7 +65,7 @@ let activePlayerToken = " ";
 
 // Game related variables
 let gameOver = false;
-const board = [
+let board = [
   [" ", " ", " "],
   [" ", " ", " "],
   [" ", " ", " "],
@@ -50,7 +106,7 @@ const renderBoard = () => {
   );
 };
 
-do {
+function takeTurn() {
   activePlayerToken = toggleActivePlayer(); //toggle active player and return token (X or O)
 
   renderBoard(); //render board before player input
@@ -108,8 +164,23 @@ do {
     gameOver = true;
     drawCondition = true;
   }
-} while (!gameOver);
 
-// final render and victory message
-renderBoard();
-console.log(!drawCondition ? `${activePlayerToken} won!!!` : "Draw");
+  renderBoard();
+
+  let returnData;
+  if (gameOver) {
+    let win = !drawCondition ? `${activePlayerToken} won!!!` : "Draw";
+    returnData = {
+      address: "gameover",
+      args: JSON.stringify({ board, activePlayer, win }),
+    };
+    console.log(win);
+  } else {
+    returnData = {
+      address: "turn",
+      args: JSON.stringify({ board, activePlayer }),
+    };
+  }
+
+  udp.send(returnData);
+}
