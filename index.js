@@ -38,9 +38,9 @@ udp.on("message", function (message, timetag, info) {
       data = JSON.parse(message.args);
       board = data.board;
       activePlayer = data.activePlayer;
-      renderBoard();
+      renderBoard(false);
       console.log(data.win);
-      setTimeout(() => process.exit(1), 1000);
+      setTimeout(() => udp.close(), 1000);
       break;
   }
 });
@@ -174,5 +174,5 @@ function takeTurn() {
 
   udp.send(returnData);
 
-  if (gameOver) setTimeout(() => process.exit(1), 1000);
+  if (gameOver) setTimeout(() => udp.close(), 1000);
 }
