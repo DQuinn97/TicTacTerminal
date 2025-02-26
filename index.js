@@ -1,9 +1,4 @@
 import osc from "osc";
-// import readline from "node:readline/promises";
-// const { stdin: input, stdout: output } = await import("node:process");
-// const rl = readline.createInterface({ input, output });
-
-import inquirer from "inquirer";
 import rl from "readline-sync";
 import chalk from "chalk";
 
@@ -47,14 +42,8 @@ udp.on("message", function (message, timetag, info) {
       console.log(data.win);
       break;
   }
-  console.log(message);
 });
-// rl.on("line", (answer) => {
-//   udp.send({
-//     address: "/sending/every/second",
-//     args: answer,
-//   });
-// });
+
 udp.open();
 
 let self = "O";
@@ -79,11 +68,11 @@ const toggleActivePlayer = () => {
   activePlayer = !activePlayer;
   return playerTokens[+!activePlayer]; //return token of active player before toggle, +! converts previous boolean value to number
 };
-const renderBoard = () => {
+const renderBoard = (needsPointer = true) => {
   console.clear(); //clear board before re-rendering
   const chalkBoard = board.map((rowVal, row) =>
     rowVal.map((colVal, col) =>
-      row == pointer[0] && col == pointer[1]
+      row == pointer[0] && col == pointer[1] && needsPointer
         ? chalk.red(activePlayerToken)
         : colVal
     )
@@ -165,7 +154,7 @@ function takeTurn() {
     drawCondition = true;
   }
 
-  renderBoard();
+  renderBoard(false);
 
   let returnData;
   if (gameOver) {
